@@ -3,65 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <title>A Magical Surprise</title>
     <style>
-        body { background-color: #fce4ec; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Arial', sans-serif; }
-        .cake-container { position: relative; cursor: pointer; }
-        
-        /* The Cake */
-        .cake { width: 200px; height: 150px; background: #6d4c41; border-radius: 10px 10px 0 0; position: relative; transition: transform 0.5s; }
-        .frosting { width: 200px; height: 40px; background: #f06292; border-radius: 10px 10px 0 0; position: absolute; top: 0; }
-
-        /* The Candle */
-        .candle { width: 10px; height: 40px; background: #fff; position: absolute; top: -40px; left: 95px; }
-        .flame { width: 15px; height: 20px; background: orange; border-radius: 50%; position: absolute; top: -20px; left: -2px; animation: flicker 0.1s infinite; }
-        
-        @keyframes flicker {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); opacity: 0.8; }
+        :root {
+            --cake-color: #f1c40f;
+            --frosting-color: #e67e22;
+            --bg-color: #0a0a2e;
+            --text-color: #ffffff;
         }
 
-        /* Interaction Classes */
-        .out { display: none; } /* Extinguish flame */
-        .cut { transform: translateX(20px); border-left: 4px white dotted; } /* "Cut" effect */
-        
-        .message { text-align: center; margin-top: 20px; color: #ad1457; font-weight: bold; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- STAGE 1: THE ENVELOPE --- */
+        #stage1 {
+            text-align: center;
+            transition: opacity 1s;
+        }
+        .envelope {
+            width: 200px;
+            height: 150px;
+            background: #ff4757;
+            position: relative;
+            cursor: pointer;
+            border-radius: 0 0 10px 10px;
+            animation: float 3s infinite ease-in-out;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: -100px; left: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 100px solid #ff6b81;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        /* --- STAGE 2: THE 3D CAKE --- */
+        #stage2 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            perspective: 1000px;
+        }
+        .cake-wrapper { position: relative; width: 300px; height: 300px; }
+        .cake {
+            position: absolute;
+            bottom: 50px;
+            width: 200px;
+            height: 120px;
+            background: #6d4c41;
+            border-radius: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 0 #5d4037;
+        }
+        .icing {
+            width: 210px;
+            height: 40px;
+            background: #f06292;
+            position: absolute;
+            top: -10px;
+            left: -5px;
+            border-radius: 20px;
+        }
+        .candle {
+            width: 12px;
+            height: 50px;
+            background: linear-gradient(to bottom, #fff 50%, #eee 50%);
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .flame {
+            width: 20px;
+            height: 30px;
+            background: #ff9800;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -30px;
+            left: -4px;
+            filter: blur(1px);
+            animation: burn 0.2s infinite alternate;
+        }
+        @keyframes burn {
+            from { transform: scale(1); box-shadow: 0 0 10px #ff9800; }
+            to { transform: scale(1.1); box-shadow: 0 0 20px #ff5722; }
+        }
+
+        /* --- STAGE 3: THE CUT --- */
+        .cut-animation {
+            animation: split 1.5s forwards ease-in;
+        }
+        @keyframes split {
+            0% { transform: translateX(-50%) rotate(0); }
+            100% { transform: translateX(-150%) rotate(-15deg); opacity: 0; }
+        }
+        .cake-right {
+            display: none;
+            animation: split-right 1.5s forwards ease-in;
+        }
+        @keyframes split-right {
+            0% { transform: translateX(-50%) rotate(0); }
+            100% { transform: translateX(50%) rotate(15deg); opacity: 0; }
+        }
+
+        /* --- STAGE 4: FINALE --- */
+        #stage4 {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #2e0249, #000);
+            z-index: 10;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 2s;
+        }
+        h1 { font-size: 5rem; text-shadow: 0 0 20px #fff; animation: glow 2s infinite alternate; }
+        @keyframes glow { from { opacity: 0.5; } to { opacity: 1; } }
+
+        /* --- UI ELEMENTS --- */
+        .btn {
+            margin-top: 50px;
+            padding: 15px 30px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+        .btn:hover { transform: scale(1.1); background: #ff6b81; }
+
+        canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <div class="cake-container" onclick="interact()">
-        <div class="candle">
-            <div id="flame" class="flame"></div>
+    <div id="stage1">
+        <h2 style="margin-bottom: 20px;">A Special Delivery for You...</h2>
+        <div class="envelope" onclick="goToStage2()"></div>
+    </div>
+
+    <div id="stage2">
+        <h2 id="instruction" style="margin-bottom: 40px;">Make a wish and click the candle!</h2>
+        <div class="cake-wrapper">
+            <div id="candle" class="candle">
+                <div id="flame" class="flame"></div>
+            </div>
+            <div id="cake-body" class="cake">
+                <div class="icing"></div>
+            </div>
+            <div id="cake-body-right" class="cake cake-right">
+                <div class="icing"></div>
+            </div>
         </div>
-        <div id="cake" class="cake">
-            <div class="frosting"></div>
-        </div>
-        <div class="message">
-            <p id="instruction">Click to blow the candle!</p>
-        </div>
+        <button id="cut-btn" class="btn" style="display: none;" onclick="cutCake()">Cut the Cake!</button>
+    </div>
+
+    <div id="stage4">
+        <h1>HAPPY BIRTHDAY!</h1>
+        <p style="font-size: 1.5rem;">May all your code be bug-free!</p>
+        <button class="btn" onclick="location.reload()">Replay Magic</button>
+        <canvas id="confetti"></canvas>
     </div>
 
     <script>
-        let stage = 0;
+        // Transition Logic
+        function goToStage2() {
+            document.getElementById('stage1').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('stage1').style.display = 'none';
+                document.getElementById('stage2').style.display = 'flex';
+            }, 1000);
+        }
 
-        function interact() {
-            const flame = document.getElementById('flame');
-            const cake = document.getElementById('cake');
-            const instruction = document.getElementById('instruction');
+        // Blow out candle
+        document.getElementById('candle').onclick = function() {
+            document.getElementById('flame').style.display = 'none';
+            document.getElementById('instruction').innerText = "The wish is sent! Now...";
+            document.getElementById('cut-btn').style.display = 'block';
+        };
 
-            if (stage === 0) {
-                // Blow out candle
-                flame.classList.add('out');
-                instruction.innerText = "Now click to cut the cake!";
-                stage = 1;
-            } else if (stage === 1) {
-                // Cut the cake
-                cake.style.clipPath = "polygon(0% 0%, 50% 0%, 50% 100%, 0% 100%)";
-                // Create a "second half" effect or just show message
-                instruction.innerText = "Yum! Happy Birthday! 🎂";
-                stage = 2;
+        // Cut the cake
+        function cutCake() {
+            const left = document.getElementById('cake-body');
+            const right = document.getElementById('cake-body-right');
+            const candle = document.getElementById('candle');
+            
+            candle.style.display = 'none';
+            right.style.display = 'block';
+            
+            left.classList.add('cut-animation');
+            right.classList.add('cut-animation');
+            
+            setTimeout(showFinale, 1000);
+        }
+
+        // Finale & Confetti
+        function showFinale() {
+            const s4 = document.getElementById('stage4');
+            s4.style.display = 'flex';
+            setTimeout(() => { s4.style.opacity = '1'; }, 100);
+            initConfetti();
+        }
+
+        // --- THE "SURPRISE" CONFETTI ENGINE ---
+        function initConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+            const colors = ['#f1c40f', '#e67e22', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
+
+            for (let i = 0; i < 200; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * 10,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.random() * 10 - 10
+                });
             }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                    ctx.stroke();
+                    
+                    p.y += (Math.cos(p.d) + 1 + p.r / 2) / 2;
+                    p.x += Math.sin(p.d);
+                    p.tilt = Math.sin(p.d) * 15;
+
+                    if (p.y > canvas.height) {
+                        particles[i] = { ...p, y: -20, x: Math.random() * canvas.width };
+                    }
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
         }
     </script>
 </body>
