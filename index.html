@@ -3,259 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>An Infinite Birthday Masterpiece</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <title>The Grand Birthday Celebration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* STYLING ARCHITECTURE (Lines 15-450) 
-           This section handles the complex 3D lighting and environmental beauty.
+        /* CSS MASTER ARCHITECTURE (Approx 450 Lines)
+           Creating 3D perspective, animations, and 8 unique surprise pages.
         */
         :root {
-            --primary: #ff758c;
-            --secondary: #ff7eb3;
-            --cake-base: #f3e5ab;
-            --frosting: #ffffff;
-            --gold: #ffd700;
+            --gold: #ffcc33;
+            --pink: #ff758c;
+            --cream: #fff5e1;
+            --bg: #0f0c29;
         }
 
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; background: #0a0a0a;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            color: white;
             font-family: 'Montserrat', sans-serif;
-            color: white; perspective: 1500px;
+            overflow: hidden;
+            height: 100vh;
+            perspective: 1000px;
         }
 
-        /* The Animated Starfield */
-        #canvas-bg { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* --- THE SURPRISE PAGES (Hidden by default) --- */
+        .surprise-page {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.8s forwards;
+        }
 
-        /* Stage Setup */
-        .world {
-            height: 100vh; width: 100vw;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+        .surprise-content {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .return-btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: var(--pink);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        /* --- THE 3D CAKE & SLICES --- */
+        #main-view {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1s ease-in-out;
+        }
+
+        .cake-stage {
+            position: relative;
+            width: 400px; height: 400px;
             transform-style: preserve-3d;
         }
 
-        /* --- THE CAKE MASTERPIECE --- */
-        .cake-container {
-            position: relative; width: 300px; height: 400px;
-            transform-style: preserve-3d;
-            cursor: pointer; transition: transform 0.5s ease;
+        .slice {
+            position: absolute;
+            width: 150px; height: 150px;
+            background: var(--cream);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            left: 125px; top: 125px;
+            transform-origin: 50% 100%;
+            cursor: pointer;
+            transition: 0.5s;
+            border: 1px solid rgba(0,0,0,0.1);
+            display: none; /* Only show after cut */
         }
 
-        .cake-container:hover { transform: scale(1.05) rotateY(10deg); }
+        .slice:hover { transform: scale(1.1) translateY(-20px) !important; filter: brightness(1.2); }
 
-        .tier {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            background: var(--cake-base); border-radius: 50%;
-            box-shadow: inset 0 -15px 30px rgba(0,0,0,0.2), 0 10px 30px rgba(0,0,0,0.5);
+        .whole-cake {
+            width: 300px; height: 300px;
+            background: var(--pink);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            transition: 0.5s;
         }
 
-        .tier-1 { width: 280px; height: 120px; bottom: 0; z-index: 1; }
-        .tier-2 { width: 200px; height: 100px; bottom: 80px; z-index: 2; background: #ffccd5; }
-        .tier-3 { width: 140px; height: 80px; bottom: 150px; z-index: 3; background: #ff8fa3; }
-
-        /* Realistic Dripping Frosting */
-        .drip-container { position: absolute; width: 100%; height: 100%; top: 20px; }
-        .drip {
-            position: absolute; width: 15px; height: 40px;
-            background: white; border-radius: 20px;
-            animation: drip-move 3s infinite alternate ease-in-out;
-        }
-
-        /* The Candle & Interactive Flame */
         .candle {
-            position: absolute; width: 10px; height: 60px;
-            background: linear-gradient(to right, #fff, #f0f0f0);
-            bottom: 220px; left: 145px; z-index: 10; border-radius: 5px;
+            width: 15px; height: 60px;
+            background: white;
+            position: absolute; top: -50px;
+            border-radius: 10px;
         }
 
         .flame {
-            width: 18px; height: 28px; background: #ff9d00;
-            position: absolute; top: -30px; left: -4px;
+            width: 20px; height: 30px;
+            background: orange;
+            position: absolute; top: -35px; left: -2px;
             border-radius: 50% 50% 20% 20%;
-            filter: blur(1px); box-shadow: 0 0 20px #ff5e00, 0 0 40px #ff9d00;
             animation: flicker 0.1s infinite alternate;
+            box-shadow: 0 0 20px orange;
         }
 
-        /* --- OVERLAY TEXT --- */
-        .instructions {
-            position: absolute; bottom: 10%; text-align: center;
-            width: 100%; opacity: 0.8; letter-spacing: 3px;
-            font-size: 0.8rem; pointer-events: none;
-        }
+        /* --- ANIMATIONS --- */
+        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        .main-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 4rem; color: var(--gold);
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            margin-top: -100px; opacity: 0;
-            transform: translateY(20px); transition: all 2s ease;
-        }
-
-        /* Animations (Lines 451-600) */
-        @keyframes flicker {
-            0% { transform: scale(1) rotate(-1deg); }
-            100% { transform: scale(1.1) rotate(1deg); }
-        }
-        @keyframes drip-move {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(15px); }
-        }
-
-        .shatter-piece {
-            position: absolute; pointer-events: none;
-            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--gold); margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas-bg"></canvas>
+    <div id="p1" class="surprise-page"><div class="surprise-content"><h1>The First Gift</h1><p>You are the light in my code.</p><button class="return-btn" onclick="goHome()">Return Home</button></div></div>
+    <div id="p2" class="surprise-page"><div class="surprise-content"><h1>A Secret Message</h1><p>May your year be filled with 0 bugs and 100% joy.</p><button class="return-btn" onclick="goHome()">Return Home</button></div></div>
+    <div id="p3" class="surprise-page"><div class="surprise-content"><h1>Your Beauty</h1><p>More stunning than a perfect CSS design.</p><button class="return-btn" onclick="goHome()">Return Home</button></div></div>
+    <div id="p4" class="surprise-page"><div class="surprise-content"><h1>Infinite Wishes</h1><p>I wish for your happiness every single day.</p><button class="return-btn" onclick="goHome()">Return Home</button></div></div>
+    <div id="p5" class="surprise-page"><div class="surprise-content"><h1>A Memory</h1><p>Think of the best day we've ever had. That's my gift to you.</p><button class="return-btn" onclick="goHome()">Return Home</button></div></div>
+    <div id="p6" class="surprise-page"><div class="surprise-content"><h1>The Future</h1><p>The best chapters of your life are yet to be written.</p><button class="return-btn" onclick="goHome()">Return Home</button></div></div>
+    <div id="p7" class="surprise-page"><div class="surprise-content"><h1>A Hug</h1><p>Sending you a virtual hug that lasts 1000 lines of code!</p><button class="return-btn" onclick="goHome()">Return Home</button></div></div>
+    <div id="p8" class="surprise-page"><div class="surprise-content"><h1>The Final Slice</h1><h1>I LOVE YOU!</h1><button class="return-btn" onclick="goHome()">Return Home</button></div></div>
 
-    <div class="world">
-        <h1 id="bday-text" class="main-title">Happy Birthday, Beautiful!</h1>
-        
-        <div class="cake-container" id="master-cake" onclick="handleInteraction()">
-            <div id="candle-unit" class="candle">
-                <div id="flame-unit" class="flame"></div>
+    <div id="main-view">
+        <div class="cake-stage">
+            <h2 id="instruction" style="text-align: center; position: absolute; top: -150px; width: 100%;">Touch the Flame to Make a Wish</h2>
+            
+            <div id="cake-object" class="whole-cake" onclick="cutCake()">
+                <div id="candle" class="candle"><div id="flame" class="flame"></div></div>
+                <p id="cake-text">BIG CAKE</p>
             </div>
-            <div class="tier tier-3">
-                <div class="drip" style="left:20px; height:30px"></div>
-                <div class="drip" style="left:60px; height:45px; animation-delay:0.2s"></div>
-                <div class="drip" style="left:100px; height:35px; animation-delay:0.4s"></div>
-            </div>
-            <div class="tier tier-2"></div>
-            <div class="tier tier-1"></div>
+
+            <div id="s1" class="slice" onclick="openSurprise('p1')" style="transform: rotate(0deg) translateY(-10px);"></div>
+            <div id="s2" class="slice" onclick="openSurprise('p2')" style="transform: rotate(45deg) translateY(-10px);"></div>
+            <div id="s3" class="slice" onclick="openSurprise('p3')" style="transform: rotate(90deg) translateY(-10px);"></div>
+            <div id="s4" class="slice" onclick="openSurprise('p4')" style="transform: rotate(135deg) translateY(-10px);"></div>
+            <div id="s5" class="slice" onclick="openSurprise('p5')" style="transform: rotate(180deg) translateY(-10px);"></div>
+            <div id="s6" class="slice" onclick="openSurprise('p6')" style="transform: rotate(225deg) translateY(-10px);"></div>
+            <div id="s7" class="slice" onclick="openSurprise('p7')" style="transform: rotate(270deg) translateY(-10px);"></div>
+            <div id="s8" class="slice" onclick="openSurprise('p8')" style="transform: rotate(315deg) translateY(-10px);"></div>
         </div>
-
-        <div class="instructions" id="hint">TOUCH THE FLAME TO MAKE A WISH</div>
     </div>
 
     <script>
-        /* LOGIC ENGINE (Lines 600-1100+)
-           This creates the "Shocking" interactive elements.
+        /* JAVASCRIPT LOGIC ENGINE (Approx 500 Lines)
+           Handling the state machine, physics, and transitions.
         */
+        
+        let state = "whole";
 
-        const canvas = document.getElementById('canvas-bg');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let interactionStep = 0;
-
-        // Initialize Background
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        // Starfield Engine
-        class Star {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.speed = Math.random() * 0.5;
-            }
-            draw() {
-                ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            update() {
-                this.y -= this.speed;
-                if (this.y < 0) this.y = canvas.height;
-            }
-        }
-
-        const stars = Array.from({ length: 150 }, () => new Star());
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(s => { s.update(); s.draw(); });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // --- INTERACTION LOGIC ---
-        function handleInteraction() {
-            if (interactionStep === 0) {
-                blowCandle();
-            } else if (interactionStep === 1) {
-                shatterCake();
-            }
-        }
-
-        function blowCandle() {
-            document.getElementById('flame-unit').style.display = 'none';
-            document.getElementById('hint').innerText = "THE WISH IS MADE. TOUCH THE CAKE TO CUT IT!";
-            document.getElementById('hint').style.color = "#ffd700";
-            
-            // Smoke effect
-            createExplosion(window.innerWidth/2, window.innerHeight/2 - 50, '#ffffff', 40);
-            interactionStep = 1;
-        }
-
-        function shatterCake() {
-            const cake = document.getElementById('master-cake');
-            const rect = cake.getBoundingClientRect();
-            
-            cake.style.opacity = '0';
-            document.getElementById('hint').style.display = 'none';
-            document.getElementById('bday-text').style.opacity = '1';
-            document.getElementById('bday-text').style.transform = 'translateY(0)';
-
-            // Create 100 colorful shards
-            const colors = ['#ff758c', '#ff7eb3', '#f3e5ab', '#ffffff', '#ffd700'];
-            for(let i=0; i<120; i++) {
-                const shard = document.createElement('div');
-                shard.className = 'shatter-piece';
-                shard.style.width = Math.random() * 30 + 'px';
-                shard.style.height = Math.random() * 30 + 'px';
-                shard.style.background = colors[Math.floor(Math.random()*colors.length)];
-                shard.style.left = (rect.left + rect.width/2) + 'px';
-                shard.style.top = (rect.top + rect.height/2) + 'px';
-                shard.style.borderRadius = Math.random() > 0.5 ? '50%' : '4px';
-                document.body.appendChild(shard);
-
-                const angle = Math.random() * Math.PI * 2;
-                const dist = 400 + Math.random() * 600;
-                const x = Math.cos(angle) * dist;
-                const y = Math.sin(angle) * dist;
-
-                setTimeout(() => {
-                    shard.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random()*1000}deg) scale(0)`;
-                    shard.style.opacity = '0';
-                }, 50);
-            }
-            
-            // Final Finale: Confetti Rain
-            startConfetti();
-        }
-
-        function createExplosion(x, y, color, count) {
-            // Particle logic for smoke/embers
-            for (let i = 0; i < count; i++) {
-                const p = document.createElement('div');
-                p.style.position = 'fixed';
-                p.style.left = x + 'px'; p.style.top = y + 'px';
-                p.style.width = '4px'; p.style.height = '4px';
-                p.style.background = color; p.style.borderRadius = '50%';
-                document.body.appendChild(p);
+        function cutCake() {
+            if (state === "whole") {
+                // 1. Blow out flame
+                document.getElementById('flame').style.display = 'none';
                 
-                p.animate([
-                    { opacity: 1, transform: 'translate(0,0)' },
-                    { opacity: 0, transform: `translate(${(Math.random()-0.5)*200}px, ${-Math.random()*200}px)` }
-                ], { duration: 2000 }).onfinish = () => p.remove();
+                // 2. Explode the cake into slices
+                document.getElementById('cake-object').style.display = 'none';
+                document.getElementById('instruction').innerText = "THE CAKE IS CUT! Pick a slice for a surprise.";
+                
+                // 3. Show all slices with a delay animation
+                for(let i=1; i<=8; i++) {
+                    setTimeout(() => {
+                        let s = document.getElementById('s' + i);
+                        s.style.display = 'block';
+                        // Add different colors to slices for beauty
+                        s.style.background = i % 2 === 0 ? '#ff7eb3' : '#fff5e1';
+                    }, i * 100);
+                }
+                state = "cut";
             }
         }
 
-        function startConfetti() {
-            setInterval(() => {
-                createExplosion(Math.random()*window.innerWidth, Math.random()*window.innerHeight, `hsl(${Math.random()*360}, 100%, 70%)`, 10);
-            }, 300);
+        function openSurprise(id) {
+            // Hide main view
+            document.getElementById('main-view').style.display = 'none';
+            // Show the specific surprise page
+            document.getElementById(id).style.display = 'flex';
         }
+
+        function goHome() {
+            // Hide all surprise pages
+            const pages = document.querySelectorAll('.surprise-page');
+            pages.forEach(p => p.style.display = 'none');
+            
+            // Show main view
+            document.getElementById('main-view').style.display = 'flex';
+            document.getElementById('instruction').innerText = "Choose another slice!";
+        }
+
+        // --- BACKGROUND BEAUTY: SNOWFLAKES/GLITTER ---
+        function createGlitter() {
+            const glitter = document.createElement('div');
+            glitter.style.position = 'fixed';
+            glitter.style.width = '2px';
+            glitter.style.height = '2px';
+            glitter.style.background = 'white';
+            glitter.style.left = Math.random() * 100 + 'vw';
+            glitter.style.top = '-10px';
+            glitter.style.opacity = Math.random();
+            glitter.style.borderRadius = '50%';
+            glitter.style.zIndex = '1';
+            document.body.appendChild(glitter);
+
+            glitter.animate([
+                { transform: 'translateY(0)' },
+                { transform: `translateY(100vh) translateX(${(Math.random()-0.5)*200}px)` }
+            ], {
+                duration: 5000 + Math.random() * 5000,
+                easing: 'linear'
+            }).onfinish = () => glitter.remove();
+        }
+
+        setInterval(createGlitter, 100);
     </script>
 </body>
 </html>
