@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waiting for the Big Day</title>
+    <title>Happy 21st Birthday!</title>
     <style>
-        /* 1. RAINBOW ANIMATED BACKGROUND */
+        /* MAIN BACKGROUND (Matching the Lock Screen style) */
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,6 +19,7 @@
             background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
             background-size: 1800% 1800%;
             animation: rainbow 18s ease infinite;
+            color: white;
         }
 
         @keyframes rainbow {
@@ -26,139 +28,176 @@
             100%{background-position:0% 82%}
         }
 
-        /* 2. MOVING LINE-SHAPES */
-        .shape {
-            position: absolute;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            animation: float 20s linear infinite;
-            z-index: 0;
-        }
-
-        .circle { border-radius: 50%; width: 50px; height: 50px; }
-        .square { width: 60px; height: 60px; }
-        .rectangle { width: 80px; height: 40px; }
-        .triangle {
-            width: 0; height: 0;
-            border-left: 30px solid transparent;
-            border-right: 30px solid transparent;
-            border-bottom: 50px solid rgba(255, 255, 255, 0.5);
-            border-top: none;
-            background: none;
-        }
-
-        @keyframes float {
-            from { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            to { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* 3. COUNTDOWN UI */
-        #content-wrapper {
+        /* Title Style */
+        .title {
+            font-size: 3.5rem;
             text-align: center;
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+            animation: popIn 1s ease-out;
         }
 
-        h1 { font-size: 2.5rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-        #countdown {
+        /* --- THE CAKE --- */
+        #cake-container {
+            position: relative;
+            width: 300px;
+            height: 350px; /* Space for candles */
             display: flex;
-            gap: 20px;
-            font-size: 1.5rem;
-            font-weight: bold;
+            flex-direction: column-reverse; /* Build layers from bottom up */
+            align-items: center;
         }
 
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 80px;
+        /* Cake tiers made with wireframes/colored lines */
+        .tier {
+            border: 4px solid white; /* The main line */
+            border-radius: 15px 15px 5px 5px;
+            box-shadow: 0 0 15px rgba(255,255,255, 0.5), inset 0 0 10px rgba(255,255,255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            position: relative;
         }
 
-        .number { font-size: 3rem; }
-        .label { font-size: 0.8rem; text-transform: uppercase; opacity: 0.8; }
-
-        #unlock-btn {
-            margin-top: 30px;
-            padding: 15px 30px;
+        /* Shape accents *inside* the cake lines */
+        .tier::before {
+            content: "▲ ● ■ ★"; /* Using symbols for speed, could be SVG */
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: rgba(255,255,255,0.4);
             font-size: 1.2rem;
-            background: white;
-            color: #ff2400;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            display: none; /* Hidden until bday */
-            transition: transform 0.3s ease;
+            letter-spacing: 15px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
-        #unlock-btn:hover { transform: scale(1.1); }
+        .tier-bottom { width: 300px; height: 100px; z-index: 1; border-color: #1ddde8; /* Cyan Line */}
+        .tier-middle { width: 220px; height: 80px; z-index: 2; border-color: #1de840; /* Green Line */}
+        .tier-top    { width: 140px; height: 60px; z-index: 3; border-color: #e8b71d; /* Yellow Line */}
+
+        /* Icing drip details (using lines) */
+        .drip {
+            position: absolute;
+            width: 20px;
+            height: 30px;
+            border-left: 4px solid white;
+            border-right: 4px solid white;
+            border-bottom: 4px solid white;
+            border-radius: 0 0 10px 10px;
+            top: -10px;
+            z-index: 4;
+        }
+        .drip-1 { left: 30px; height: 40px; }
+        .drip-2 { left: 100px; height: 25px; }
+        .drip-3 { left: 180px; height: 35px; }
+
+        /* --- THE CANDLES --- */
+        #candle-rack {
+            position: absolute;
+            top: -40px; /* Position above top tier */
+            width: 140px;
+            height: 50px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 5;
+        }
+
+        .candle {
+            width: 8px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            /* Simple line pattern on candle */
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,0,0,0.3) 5px, rgba(255,0,0,0.3) 10px);
+        }
+
+        /* Flame animation */
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 18px;
+            background: #ffdb58; /* Flame Color */
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 10px #ff9f43, 0 0 20px #ff2400;
+            animation: flicker 0.1s ease-in-out infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 1; }
+        }
+
+        /* Button to go to next surprise (optional) */
+        .next-btn {
+            margin-top: 50px;
+            padding: 12px 24px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .next-btn:hover { background: white; color: #ff2400; }
+
     </style>
 </head>
 <body>
 
-    <script>
-        const colors = ['circle', 'square', 'rectangle', 'triangle'];
-        for (let i = 0; i < 15; i++) {
-            let shape = document.createElement('div');
-            shape.classList.add('shape');
-            shape.classList.add(colors[Math.floor(Math.random() * colors.length)]);
-            shape.style.left = Math.random() * 100 + 'vw';
-            shape.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            shape.style.animationDelay = Math.random() * 5 + 's';
-            document.body.appendChild(shape);
-        }
-    </script>
+    <h1 class="title">Happy 21st Birthday, [Her Name]!</h1>
 
-    <div id="content-wrapper">
-        <h1 id="title">Countdown to Your Birthday!</h1>
-        <div id="countdown">
-            <div class="time-box"><span class="number" id="days">00</span><span class="label">Days</span></div>
-            <div class="time-box"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
-            <div class="time-box"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
-            <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
+    <div id="cake-container">
+        <div class="tier tier-bottom">
+            <div class="drip drip-1"></div>
+            <div class="drip drip-3"></div>
         </div>
-        <button id="unlock-btn" onclick="nextPage()">Click to Open Your Surprise 🎁</button>
+        
+        <div class="tier tier-middle">
+             <div class="drip drip-2"></div>
+        </div>
+        
+        <div class="tier tier-top">
+            <div id="candle-rack">
+                </div>
+        </div>
     </div>
 
+    <button class="next-btn">Our Memories ✨</button>
+
     <script>
-        // Set the birthday date (Year 2026, Month March (2), Day 29, Time 00:00:00)
-        const birthdayDate = new Date("March 29, 2026 00:00:00").getTime();
+        // GENERATE 21 CANDLES
+        const candleRack = document.getElementById('candle-rack');
+        const colors = ['#ff9f43', '#1ddde8', '#1de840', '#dd00f3', '#e8b71d']; // Color accents for flames/patterns
 
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = birthdayDate - now;
+        for (let i = 0; i < 21; i++) {
+            // Create candle stick
+            const candle = document.createElement('div');
+            candle.classList.add('candle');
+            
+            // Give random line color pattern
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            candle.style.backgroundImage = `repeating-linear-gradient(45deg, transparent, transparent 5px, ${randomColor}33 5px, ${randomColor}33 10px)`;
 
-            // Calculations for days, hours, minutes and seconds
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Create flame
+            const flame = document.createElement('div');
+            flame.classList.add('flame');
+            
+            // Randomize flame animation speed slightly for realism
+            flame.style.animationDuration = (Math.random() * 0.1 + 0.05) + 's';
 
-            // Output the results
-            document.getElementById("days").innerHTML = days;
-            document.getElementById("hours").innerHTML = hours;
-            document.getElementById("minutes").innerHTML = minutes;
-            document.getElementById("seconds").innerHTML = seconds;
-
-            // If the countdown is finished
-            if (distance < 0) {
-                clearInterval(timer);
-                document.getElementById("countdown").style.display = "none";
-                document.getElementById("title").innerHTML = "HAPPY BIRTHDAY!";
-                document.getElementById("unlock-btn").style.display = "inline-block";
-            }
-        }, 1000);
-
-        function nextPage() {
-            // Replace 'content.html' with the name of your second page
-            window.location.href = "content.html";
+            candle.appendChild(flame);
+            candleRack.appendChild(candle);
         }
     </script>
 </body>
