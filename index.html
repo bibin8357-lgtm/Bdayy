@@ -3,201 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 21st Birthday!</title>
+    <title>A Message for You</title>
     <style>
-        /* MAIN BACKGROUND (Matching the Lock Screen style) */
+        :root {
+            --bg-color: #fffaf0;
+            --text-color: #5d4037;
+            --accent-color: #e91e63;
+        }
+
         body {
             margin: 0;
             padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Georgia', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            width: 80%;
+            max-width: 400px;
+            min-height: 300px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
-            background-size: 1800% 1800%;
-            animation: rainbow 18s ease infinite;
+            position: relative;
+            border: 2px solid #fce4ec;
+        }
+
+        .page {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 { color: var(--accent-color); font-size: 1.5rem; margin-bottom: 20px; }
+        p { line-height: 1.6; font-size: 1.1rem; color: var(--text-color); }
+
+        .btn {
+            margin-top: 30px;
+            padding: 12px 25px;
+            background-color: var(--accent-color);
             color: white;
-        }
-
-        @keyframes rainbow {
-            0%{background-position:0% 82%}
-            50%{background-position:100% 19%}
-            100%{background-position:0% 82%}
-        }
-
-        /* Title Style */
-        .title {
-            font-size: 3.5rem;
-            text-align: center;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
-            animation: popIn 1s ease-out;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* --- THE CAKE --- */
-        #cake-container {
-            position: relative;
-            width: 300px;
-            height: 350px; /* Space for candles */
-            display: flex;
-            flex-direction: column-reverse; /* Build layers from bottom up */
-            align-items: center;
-        }
-
-        /* Cake tiers made with wireframes/colored lines */
-        .tier {
-            border: 4px solid white; /* The main line */
-            border-radius: 15px 15px 5px 5px;
-            box-shadow: 0 0 15px rgba(255,255,255, 0.5), inset 0 0 10px rgba(255,255,255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(2px);
-            position: relative;
-        }
-
-        /* Shape accents *inside* the cake lines */
-        .tier::before {
-            content: "▲ ● ■ ★"; /* Using symbols for speed, could be SVG */
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            color: rgba(255,255,255,0.4);
-            font-size: 1.2rem;
-            letter-spacing: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .tier-bottom { width: 300px; height: 100px; z-index: 1; border-color: #1ddde8; /* Cyan Line */}
-        .tier-middle { width: 220px; height: 80px; z-index: 2; border-color: #1de840; /* Green Line */}
-        .tier-top    { width: 140px; height: 60px; z-index: 3; border-color: #e8b71d; /* Yellow Line */}
-
-        /* Icing drip details (using lines) */
-        .drip {
-            position: absolute;
-            width: 20px;
-            height: 30px;
-            border-left: 4px solid white;
-            border-right: 4px solid white;
-            border-bottom: 4px solid white;
-            border-radius: 0 0 10px 10px;
-            top: -10px;
-            z-index: 4;
-        }
-        .drip-1 { left: 30px; height: 40px; }
-        .drip-2 { left: 100px; height: 25px; }
-        .drip-3 { left: 180px; height: 35px; }
-
-        /* --- THE CANDLES --- */
-        #candle-rack {
-            position: absolute;
-            top: -40px; /* Position above top tier */
-            width: 140px;
-            height: 50px;
-            display: flex;
-            justify-content: space-around;
-            z-index: 5;
-        }
-
-        .candle {
-            width: 8px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 4px 4px 0 0;
-            position: relative;
-            /* Simple line pattern on candle */
-            background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,0,0,0.3) 5px, rgba(255,0,0,0.3) 10px);
-        }
-
-        /* Flame animation */
-        .flame {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 12px;
-            height: 18px;
-            background: #ffdb58; /* Flame Color */
-            border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 10px #ff9f43, 0 0 20px #ff2400;
-            animation: flicker 0.1s ease-in-out infinite alternate;
-        }
-
-        @keyframes flicker {
-            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
-            100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 1; }
-        }
-
-        /* Button to go to next surprise (optional) */
-        .next-btn {
-            margin-top: 50px;
-            padding: 12px 24px;
-            border: 2px solid white;
-            background: transparent;
-            color: white;
-            border-radius: 20px;
+            border: none;
+            border-radius: 25px;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.3s;
+            font-size: 1rem;
+            transition: transform 0.2s;
         }
-        .next-btn:hover { background: white; color: #ff2400; }
 
+        .btn:hover { transform: scale(1.05); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .heart { color: var(--accent-color); font-size: 2rem; }
     </style>
 </head>
 <body>
 
-    <h1 class="title">Happy 21st Birthday, [Her Name]!</h1>
+    <div class="card">
+        <div class="page active" id="p1">
+            <div class="heart">❤️</div>
+            <h1>Hi Beautiful,</h1>
+            <p>I was thinking about you today and wanted to remind you of a few things...</p>
+            <button class="btn" onclick="nextPage(2)">Click to continue</button>
+        </div>
 
-    <div id="cake-container">
-        <div class="tier tier-bottom">
-            <div class="drip drip-1"></div>
-            <div class="drip drip-3"></div>
+        <div class="page" id="p2">
+            <h1>The Little Things</h1>
+            <p>Like the way your eyes light up when you're excited, or how you make the hardest days feel easy just by being there.</p>
+            <button class="btn" onclick="nextPage(3)">Next</button>
         </div>
-        
-        <div class="tier tier-middle">
-             <div class="drip drip-2"></div>
+
+        <div class="page" id="p3">
+            <h1>My Favorite Place</h1>
+            <p>People travel the world looking for peace, but I found mine right next to you.</p>
+            <button class="btn" onclick="nextPage(4)">Next</button>
         </div>
-        
-        <div class="tier tier-top">
-            <div id="candle-rack">
-                </div>
+
+        <div class="page" id="p4">
+            <h1>The Journey</h1>
+            <p>Every memory we've made so far is like a favorite song I never want to stop playing.</p>
+            <button class="btn" onclick="nextPage(5)">Next</button>
+        </div>
+
+        <div class="page" id="p5">
+            <h1>Thank You</h1>
+            <p>For being my best friend, my biggest supporter, and the person who knows me better than anyone else.</p>
+            <button class="btn" onclick="nextPage(6)">Next</button>
+        </div>
+
+        <div class="page" id="p6">
+            <div class="heart">🎁</div>
+            <h1>The Surprise!</h1>
+            <p>I couldn't wait any longer to tell you... <br><br><b>[INSERT YOUR SURPRISE HERE - e.g. Pack your bags, we're going away this weekend!]</b></p>
+            <p style="font-size: 0.8rem; margin-top: 20px;">I love you!</p>
         </div>
     </div>
 
-    <button class="next-btn">Our Memories ✨</button>
-
     <script>
-        // GENERATE 21 CANDLES
-        const candleRack = document.getElementById('candle-rack');
-        const colors = ['#ff9f43', '#1ddde8', '#1de840', '#dd00f3', '#e8b71d']; // Color accents for flames/patterns
+        function nextPage(pageNumber) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.classList.remove('active'));
 
-        for (let i = 0; i < 21; i++) {
-            // Create candle stick
-            const candle = document.createElement('div');
-            candle.classList.add('candle');
-            
-            // Give random line color pattern
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            candle.style.backgroundImage = `repeating-linear-gradient(45deg, transparent, transparent 5px, ${randomColor}33 5px, ${randomColor}33 10px)`;
-
-            // Create flame
-            const flame = document.createElement('div');
-            flame.classList.add('flame');
-            
-            // Randomize flame animation speed slightly for realism
-            flame.style.animationDuration = (Math.random() * 0.1 + 0.05) + 's';
-
-            candle.appendChild(flame);
-            candleRack.appendChild(candle);
+            // Show the target page
+            document.getElementById('p' + pageNumber).classList.add('active');
         }
     </script>
 </body>
